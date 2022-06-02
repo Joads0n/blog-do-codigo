@@ -28,7 +28,7 @@ passport.use(
         try {
             const user = await Usuario.buscaPorEmail(email);
             userVerification(user);
-            passwordVerification(password, user.passwordHash);
+            await passwordVerification(password, user.passwordHash);
 
             done(null, user);
         } catch (err){
