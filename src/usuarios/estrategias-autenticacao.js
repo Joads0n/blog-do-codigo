@@ -22,7 +22,7 @@ passport.use(
     /** Objeto de campos opcionais e função callback de verificação */
     new LocalStrategy({ 
         usernameField: 'email',
-        passportField: 'password',
+        passwordField: 'password',
         session: false
     }, async (email, password, done) => {
         try {

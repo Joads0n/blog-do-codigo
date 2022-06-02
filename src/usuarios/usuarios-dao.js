@@ -9,7 +9,7 @@ module.exports = {
           INSERT INTO usuarios (
             nome,
             email,
-            senhaHash
+            passwordHash
           ) VALUES (?, ?, ?)
         `,
         [usuario.nome, usuario.email, usuario.passwordHash],
