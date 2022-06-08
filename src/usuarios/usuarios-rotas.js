@@ -6,6 +6,9 @@ module.exports = app => {
     .route('/usuario/login')
     .post(middlewaresAuthentication.local, usuariosControlador.login);   /** Middleware de autenticação */
   app
+    .route('/usuario/logout')
+    .get(middlewaresAuthentication.bearer, usuariosControlador.logout);
+  app
     .route('/usuario')
     .post(usuariosControlador.adiciona)
     .get(usuariosControlador.lista);

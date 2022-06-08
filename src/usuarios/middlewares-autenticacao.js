@@ -39,7 +39,7 @@ module.exports = {
                 if(!user){
                     return res.status(401).json(); 
                 }
-
+                req.token = info.token;
                 req.user = user;
                 return next();
             }
