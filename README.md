@@ -8,7 +8,7 @@ Concepts seen and practiced:
 
 * Used Lib bcrypt for generate passwords hash with salt.
 * Used Lib passport, passport-local and passport-http-bearer to middlawares of the authentication. 
-* Used Lib jsonwebtoken for generate tokens with time expiration and returns to user.
+* Used Lib jsonwebtoken for generate access tokens with time expiration and returns to user.
 * Custom authentication errors.
 * Logout using tokens with blacklist and redis.
-* Routes protected by authentication middleware 
+* Routes protected by authentication middleware.
