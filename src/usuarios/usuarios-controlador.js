@@ -2,6 +2,8 @@ const Usuario = require('./usuarios-modelo');
 const { InvalidArgumentError, InternalServerError } = require('../erros');
 const jwt = require('jsonwebtoken');
 const blacklist = require('../../redis/manipula-blacklist');
+const crypto = require('crypto');
+const moment = require('moment');
 
 
 function createTokenJWT(user){
@@ -11,6 +13,12 @@ function createTokenJWT(user){
 
   const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: '15m' });
   return token;
+}
+
+function createRefreshToken(user) {
+  const refreshToken = crypto.randomBytes(24).toString('hex');
+  const expirationDate = moment().add(5, 'd').unix();
+  return refreshToken;
 }
 
 module.exports = {
@@ -37,12 +45,17 @@ module.exports = {
     }
   },
 
-  login: (req, res) => {
-    const token = createTokenJWT(req.user);
-    res.set('Authorization', token);
-    res.status(204).send();
+  async login(req, res) {
+    try {
+      const acessToken = createTokenJWT(req.user);
+      const refreshToken = createRefreshToken();
+      res.set('Authorization', acessToken);
+      res.status(200).json();
+    } catch (err) {
+      res.status(500).json({ Error: err.message });
+    }
   },
-
+  
   logout: async (req, res) => {
     try {
       const token = req.token;
