@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const jwt = require('jsonwebtoken');
-const blacklist = require('../../redis/manipula-blacklist');
+const blocklist = require('../../redis/blocklist-acess-token');
 
 const Usuario = require('./usuarios-modelo');
 const { InvalidArgumentError } = require('../erros');
@@ -21,9 +21,9 @@ async function passwordVerification(password, passwordHash) {
     }
 }
 
-async function verifyTokenBlacklist(token){
-    const tokenBlacklist = await blacklist.containToken(token)
-    if(tokenBlacklist){
+async function verifyTokenBlocklist(token){
+    const tokenBlocklist = await blocklist.containToken(token)
+    if(tokenBlocklist){
         throw new jwt.JsonWebTokenError('Token inválido por lougout');
     }
 }
@@ -51,7 +51,7 @@ passport.use(
     /* Função de verificação do token */
     new BearerStrategy( async (token, done) => {
         try {
-            await verifyTokenBlacklist(token);
+            await verifyTokenBlocklist(token);
             const payload = jwt.verify(token, process.env.KEY_JWT);
             const user = await Usuario.buscaPorId(payload.id);
             
