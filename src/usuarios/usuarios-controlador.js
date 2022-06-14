@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const blacklist = require('../../redis/manipula-blacklist');
 const crypto = require('crypto');
 const moment = require('moment');
+const allowlistRefreshToken = require('../../redis/allowlist-refresh-token');
 
 
 function createTokenJWT(user){
@@ -15,9 +16,11 @@ function createTokenJWT(user){
   return token;
 }
 
-function createRefreshToken(user) {
+async function createRefreshToken(user) {
   const refreshToken = crypto.randomBytes(24).toString('hex');
   const expirationDate = moment().add(5, 'd').unix();
+  await allowlistRefreshToken.addList(refreshToken, user.id, expirationDate);
+  
   return refreshToken;
 }
 
@@ -48,8 +51,9 @@ module.exports = {
   async login(req, res) {
     try {
       const acessToken = createTokenJWT(req.user);
-      const refreshToken = createRefreshToken();
+      const refreshToken = await createRefreshToken(req.user);
       res.set('Authorization', acessToken);
+      console.log({refreshToken})
       res.status(200).json();
     } catch (err) {
       res.status(500).json({ Error: err.message });
