@@ -3,6 +3,9 @@ const middlewaresAuthentication = require('./middlewares-autenticacao');
 
 module.exports = app => {
   app
+    .route('/usuario/atualiza_token')
+    .post(middlewaresAuthentication.refresh, usuariosControlador.login);  /** O metodo login já gera um acess token e um refresh token */
+  app
     .route('/usuario/login')
     .post(middlewaresAuthentication.local, usuariosControlador.login);   /** Middleware de autenticação */
   app

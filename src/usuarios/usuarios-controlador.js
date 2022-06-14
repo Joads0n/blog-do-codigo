@@ -53,7 +53,8 @@ module.exports = {
       const acessToken = createTokenJWT(req.user);
       const refreshToken = await createRefreshToken(req.user);
       res.set('Authorization', acessToken);
-      res.status(200).json();
+      res.status(200).json({refreshToken});
+      //res.status(200).json();
     } catch (err) {
       res.status(500).json({ Error: err.message });
     }
