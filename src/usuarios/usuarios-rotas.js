@@ -10,7 +10,7 @@ module.exports = app => {
     .post(middlewaresAuthentication.local, usuariosControlador.login);   /** Middleware de autenticação */
   app
     .route('/usuario/logout')
-    .get(middlewaresAuthentication.bearer, usuariosControlador.logout);
+    .post([middlewaresAuthentication.refresh, middlewaresAuthentication.bearer], usuariosControlador.logout);
   app
     .route('/usuario')
     .post(usuariosControlador.adiciona)
