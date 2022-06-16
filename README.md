@@ -14,3 +14,4 @@ Concepts seen and practiced:
 * Routes protected by authentication middleware.
 * Authentication with acess tokens and refresh tokens.
 * Allow List to refresh tokens.
+* Used lib nodemailer to send verification email to user. 

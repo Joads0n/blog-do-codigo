@@ -1,8 +1,12 @@
 const Usuario = require('./usuarios-modelo');
 const { InvalidArgumentError, InternalServerError } = require('../erros');
 const tokens = require('./tokens');
+const { VerificationEmail } = require('./email');
 
-
+function generateAddress(route, userId) {
+  const base = process.env.BASE_URL;
+  return `${base}${route}${userId}`;
+}
 
 module.exports = {
   adiciona: async (req, res) => {
@@ -13,8 +17,13 @@ module.exports = {
         nome,
         email,
       });
+
       await usuario.addPassword(senha)
       await usuario.adiciona();
+
+      const address = generateAddress('/usuario/verifica_email/', usuario.id);
+      const verificationEmail = new VerificationEmail(usuario, address);
+      verificationEmail.sendEmail().catch(console.log)
 
       res.status(201).json();
     } catch (erro) {
