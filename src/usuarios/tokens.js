@@ -24,6 +24,10 @@ async function verifyTokenBlocklist(token, name, blocklist){
     }
 }
 
+function invalidTokenJWT(token, blocklist) {
+    return blocklist.addTokenBlocklist(token);
+}
+
 async function createRefreshToken(id, [amountTime, UnityTime], allowlist) {
     const refreshToken = crypto.randomBytes(24).toString('hex');
     const expirationDate = moment().add(amountTime, UnityTime).unix();
@@ -37,6 +41,10 @@ async function verifyRefreshToken(token, name, allowlist) {
     const id = await allowlist.containKey(token);
     verifyTokenValid(id, name);
     return id;
+}
+
+async function invalidRefreshToken(token, allowlist) {
+    await allowlist.delete(token);
 }
 
 function verifyTokenValid(id, name) {
@@ -61,6 +69,9 @@ module.exports = {
         },
         verify(token) {
             return verifyTokenJWT(token, this.name, this.list);
+        },
+        invalid(token) {
+            return invalidTokenJWT(token, this.list);
         }
     },
 
@@ -73,6 +84,9 @@ module.exports = {
         },
         verify(token) {
             return verifyRefreshToken(token, this.name, this.list);
+        },
+        invalid(token) {
+            return invalidRefreshToken(token, this.list);
         }
     }
 }
