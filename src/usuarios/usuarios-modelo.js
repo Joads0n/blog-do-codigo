@@ -30,6 +30,10 @@ class Usuario {
     validacoes.campoStringNaoNulo(this.email, 'email');
   }
   
+  async verifyEmail() {
+    this.emailVerified = true;
+    await usuariosDao.modifyEmailVerified(this, this.emailVerified);
+  }
   
   async deleta() {
     return usuariosDao.deleta(this);

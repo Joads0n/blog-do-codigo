@@ -81,6 +81,14 @@ module.exports = {
     });
   },
 
+  async modifyEmailVerified(user, emailVerified) {
+    try {
+      await db.run(`UPDATE usuarios SET emailVerified = ? WHERE id = ?`, [emailVerified, user.id]);
+    } catch (error) {
+      throw new InternalServerError('Error modifying email verification.');
+    }
+  },
+
   deleta: usuario => {
     return new Promise((resolve, reject) => {
       db.run(
