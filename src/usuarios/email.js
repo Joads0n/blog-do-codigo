@@ -10,7 +10,7 @@ class Email {
         });
         const info = await transport.sendMail(this);
     
-        console.log('URL: ' + nodemailer.getTestMessageUrl(info));
+        //console.log('URL: ' + nodemailer.getTestMessageUrl(info));
     }
 }
 

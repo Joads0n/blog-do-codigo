@@ -10,6 +10,7 @@ class Usuario {
     this.nome = usuario.nome;
     this.email = usuario.email;
     this.passwordHash = usuario.passwordHash;
+    this.emailVerified = usuario.emailVerified;
 
     this.valida();
   }

@@ -14,7 +14,8 @@ const USUARIOS_SCHEMA = `
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome VARCHAR(40) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    passwordHash VARCHAR(255) NOT NULL
+    passwordHash VARCHAR(255) NOT NULL,
+    emailVerified INTEGER
   )
   `;
 
