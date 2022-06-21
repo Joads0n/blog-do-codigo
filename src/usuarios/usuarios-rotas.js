@@ -6,7 +6,7 @@ module.exports = app => {
     .route('/usuario/atualiza_token')
     .post(middlewaresAuthentication.refresh, usuariosControlador.login);  /** O metodo login já gera um acess token e um refresh token */
   app
-    .route('/usuario/verifica_email/:id')
+    .route('/usuario/verifica_email/:token')
     .get(middlewaresAuthentication.verificationEmail, usuariosControlador.emailVerify)
   app
     .route('/usuario/login')

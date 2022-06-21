@@ -18,6 +18,9 @@ async function verifyTokenJWT(token, name, blocklist) {
 }
 
 async function verifyTokenBlocklist(token, name, blocklist){
+    if(!blocklist){
+        return;
+    }
     const tokenBlocklist = await blocklist.containToken(token);
     if(tokenBlocklist){
         throw new jwt.JsonWebTokenError(`${name}Token invalid to lougout`);
@@ -88,6 +91,17 @@ module.exports = {
         invalid(token) {
             return invalidRefreshToken(token, this.list);
         }
+    },
+
+    verifyEmail: {      /* Uso do JWT para gerar um token para substituir o id */
+        name: 'email verification token',  
+        expiration: [1, 'h'],
+        create(id) {
+            return createTokenJWT(id, this.expiration);
+        },
+        verify(token) {
+            return verifyTokenJWT(token, this.name);
+        },
     }
 }
 

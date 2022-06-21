@@ -3,9 +3,9 @@ const { InvalidArgumentError, InternalServerError } = require('../erros');
 const tokens = require('./tokens');
 const { VerificationEmail } = require('./email');
 
-function generateAddress(route, userId) {
+function generateAddress(route, token) {
   const base = process.env.BASE_URL;
-  return `${base}${route}${userId}`;
+  return `${base}${route}${token}`;
 }
 
 module.exports = {
@@ -22,7 +22,9 @@ module.exports = {
       await usuario.addPassword(senha)
       await usuario.adiciona();
 
-      const address = generateAddress('/usuario/verifica_email/', usuario.id);
+      const token = tokens.verifyEmail.create(usuario.id);
+
+      const address = generateAddress('/usuario/verifica_email/', token);
       const verificationEmail = new VerificationEmail(usuario, address);
       verificationEmail.sendEmail().catch(console.log)
 
