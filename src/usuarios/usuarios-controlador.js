@@ -65,8 +65,19 @@ module.exports = {
     res.json(usuarios);
   },
 
+  async emailVerify(req, res) {
+    try {
+      const user = req.user;
+      console.log({user})
+      await user.verifyEmail();
+      res.status(200).send();
+    } catch (error) {
+      res.status(500).json({ Error: error.message });
+    }
+  },
+
   deleta: async (req, res) => {
-    const usuario = await Usuario.buscaPorId(req.params.id);
+    const usuario = req.user;
     try {
       await usuario.deleta();
       res.status(200).send();
