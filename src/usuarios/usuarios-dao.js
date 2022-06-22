@@ -10,10 +10,11 @@ module.exports = {
             nome,
             email,
             passwordHash,
-            emailVerified
-          ) VALUES (?, ?, ?, ?)
+            emailVerified,
+            role
+          ) VALUES (?, ?, ?, ?, ?)
         `,
-        [usuario.nome, usuario.email, usuario.passwordHash, usuario.emailVerified],
+        [usuario.nome, usuario.email, usuario.passwordHash, usuario.emailVerified, usuario.role],
         erro => {
           if (erro) {
             reject(new InternalServerError('Erro ao adicionar o usuário!'));

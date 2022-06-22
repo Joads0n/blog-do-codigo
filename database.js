@@ -15,7 +15,8 @@ const USUARIOS_SCHEMA = `
     nome VARCHAR(40) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     passwordHash VARCHAR(255) NOT NULL,
-    emailVerified INTEGER
+    emailVerified INTEGER,
+    role VARCHAR(15) CHECK (role in ('admin', 'editor', 'subscriber')) NOT NULL
   )
   `;
 

@@ -11,6 +11,7 @@ class Usuario {
     this.email = usuario.email;
     this.passwordHash = usuario.passwordHash;
     this.emailVerified = usuario.emailVerified;
+    this.role = usuario.role;
 
     this.valida();
   }
@@ -28,6 +29,11 @@ class Usuario {
   valida() {
     validacoes.campoStringNaoNulo(this.nome, 'nome');
     validacoes.campoStringNaoNulo(this.email, 'email');
+
+    const validRoles = ['admin', 'editor', 'subscriber'];
+    if(validRoles.indexOf(this.role) === -1){
+      throw new InvalidArgumentError('The field role is invalid.');
+    }
   }
   
   async verifyEmail() {
