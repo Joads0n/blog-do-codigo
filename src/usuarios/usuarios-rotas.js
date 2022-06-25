@@ -1,5 +1,6 @@
 const usuariosControlador = require('./usuarios-controlador');
 const middlewaresAuthentication = require('./middlewares-autenticacao');
+const autorizacao = require('../middlewares/autorizacao');
 
 module.exports = app => {
   app
@@ -17,7 +18,10 @@ module.exports = app => {
   app
     .route('/usuario')
     .post(usuariosControlador.adiciona)
-    .get(usuariosControlador.lista);
+    .get(
+      [middlewaresAuthentication.bearer, autorizacao('usuario', 'readAny')],
+      usuariosControlador.lista
+    );
 
   app.route('/usuario/:id').delete(middlewaresAuthentication.bearer, usuariosControlador.deleta);
 };

@@ -15,6 +15,7 @@ Concepts seen and practiced:
 * Authentication with acess tokens and refresh tokens.
 * Allow List to refresh tokens.
 * Used lib nodemailer to send verification email with token id to user.
+* Control Access and Permissions (PABC & RBAC)
 
 ## Blog Documentation:
 
