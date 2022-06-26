@@ -5,15 +5,11 @@ const tokens = require('./tokens');
 module.exports = {
     local: (req, res, next) => {
         passport.authenticate('local', { session: false }, (error, user, info) => {
-            if(error && error.name === 'InvalidArgumentError'){
-                return res.status(401).json({ error: error.message });
-            }
+            
             if(error){
-                return res.status(500).json({ error: error.message });
+                return next(error);
             }
-            if(!user){
-                return res.status(401).json(); 
-            }
+            
             req.user = user;
             req.authenticated = true;
             return next();
@@ -26,22 +22,11 @@ module.exports = {
             'bearer', 
             { session: false },
             (error, user, info) => {
-                
-                if(error && error.name === 'JsonWebTokenError'){
-                    return res.status(401).json({ error: error.message });
-                }
-
-                if(error && error.name === 'TokenExpiredError'){
-                    return res.status(401).json({ error: error.message, expiradoEm: error.expiredAt });
-                }
 
                 if(error){
-                    return res.status(500).json({ error: error.message }); 
+                    return next(error); 
                 }
 
-                if(!user){
-                    return res.status(401).json(); 
-                }
                 req.token = info.token;
                 req.user = user;
                 req.authenticated = true;
@@ -57,11 +42,10 @@ module.exports = {
             await tokens.refresh.invalid(refreshToken);
             req.user = await Usuario.buscaPorId(id);
             return next(); 
-        } catch (err) {
-            if(err.name === 'InvalidArgumentError'){
-                return res.status(401).json({ Error: err.message });
+        } catch (error) {
+            if(error){
+                return next(error);
             }
-            return res.status(500).json({ Error: err.message });
         }
     },
 
@@ -73,13 +57,9 @@ module.exports = {
             req.user = user;
             next();
         } catch (error) {
-            if(error.name === 'JsonWebTokenError'){
-                return res.status(401).json({ Error: error.message });
+            if(error){
+                return next(error);
             }
-            if(error.name === 'TokenExpiredError'){
-                return res.status(401).json({ Error: error.message, expiredAt: error.expiredAt });
-            }
-            return res.status(500).json({ Error: error.message });
         }
     }
 } 

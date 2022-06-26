@@ -9,7 +9,7 @@ function generateAddress(route, token) {
 }
 
 module.exports = {
-  adiciona: async (req, res) => {
+  adiciona: async (req, res, next) => {
     const { nome, email, senha, role } = req.body;
 
     try {
@@ -30,62 +30,69 @@ module.exports = {
       verificationEmail.sendEmail().catch(console.log)
 
       res.status(201).json();
-    } catch (erro) {
-      if (erro instanceof InvalidArgumentError) {
-        res.status(422).json({ erro: erro.message });
-      } else if (erro instanceof InternalServerError) {
-        res.status(500).json({ erro: erro.message });
-      } else {
-        res.status(500).json({ erro: erro.message });
-      }
+    } catch (error) {
+      /*
+        if (erro instanceof InvalidArgumentError) {
+          res.status(422).json({ erro: erro.message });
+        } else if (erro instanceof InternalServerError) {
+          res.status(500).json({ erro: erro.message });
+        } else {
+          res.status(500).json({ erro: erro.message });
+        }
+      */
+      next(error);
     }
   },
 
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const acessToken = tokens.access.create(req.user.id);
       const refreshToken = await tokens.refresh.create(req.user.id);
       res.set('Authorization', acessToken);
       res.status(200).json({refreshToken});
       //res.status(200).json();
-    } catch (err) {
-      res.status(500).json({ Error: err.message });
+    } catch (error) {
+      next(error);
     }
   },
   
-  logout: async (req, res) => {
+  logout: async (req, res, next) => {
     try {
       const token = req.token;
       await tokens.access.invalid(token);
       res.status(204).send();
-    } catch (err) {
-      res.status(500).json({ Error: err.message });
+    } catch (error) {
+      next(error);
     }
   },
 
-  lista: async (req, res) => {
-    const usuarios = await Usuario.lista();
-    res.json(usuarios);
+  lista: async (req, res, next) => {
+    try {
+      const usuarios = await Usuario.lista();
+      res.json(usuarios);
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async emailVerify(req, res) {
+  async emailVerify(req, res, next) {
     try {
       const user = req.user;
       console.log({user})
       await user.verifyEmail();
       res.status(200).send();
     } catch (error) {
-      res.status(500).json({ Error: error.message });
+      next(error);
     }
   },
 
-  deleta: async (req, res) => {
+  deleta: async (req, res, next) => {
     const usuario = req.user;
     try {
       await usuario.deleta();
       res.status(200).send();
-    } catch (erro) {
-      res.status(500).json({ erro: erro });
+    } catch (error) {
+      next(error);
     }
   }
 };
