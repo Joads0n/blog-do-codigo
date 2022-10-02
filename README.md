@@ -1,6 +1,6 @@
 # Blog do código - Auth with tokens
 
-Implementation of a API in NodeJs, using authentication system and tokens, during the course of Alura, aim at the learning.
+Implementation of a API in [NodeJs](https://nodejs.org/en/), using authentication system and tokens, during the course of [Alura](https://cursos.alura.com.br), aim at the learning.
 
 Aiming for a more scalable token validation system than session authentication.
 
